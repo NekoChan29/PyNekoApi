@@ -19,7 +19,7 @@ class SyncRequest:
 
     def _post(self, url: str, *args: Any, **kwargs: Any) -> Dict[Any, Any]:
         with contextlib.suppress(Exception):
-            response = self.fetch.get(url=url, timeout=self.timeout, *args, **kwargs)
+            response = self.fetch.post(url=url, timeout=self.timeout, *args, **kwargs)
             return response.json()
 
         return {"ok": True, "error": "Contact the owner for repair @excute7."}
