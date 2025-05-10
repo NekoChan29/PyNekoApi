@@ -52,7 +52,7 @@ version = {attr = "pynekoapi.__version__"}
 include-package-data = true
 
 [tool.setuptools.packages.find]
-include = ["pynekoapi"]
+include = ["pynekoapi*"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"
