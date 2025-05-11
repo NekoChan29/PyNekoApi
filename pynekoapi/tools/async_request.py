@@ -20,7 +20,7 @@ class AsyncRequest(AsyncClient):
     async def _get(self, *args: Any, **kwargs: Any) -> Dict[Any, Any]:
         with contextlib.suppress(Exception):
             response = await self.get(*args, **kwargs)
-            return response.josn()
+            return response.json()
 
         return {"ok": False, "error": "Contact the owner for repair @excute7."}
 
