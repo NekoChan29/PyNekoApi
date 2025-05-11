@@ -44,7 +44,9 @@ class AsyncNekoApi:
         )
         return result
 
-    async def register_date(self, user_id: int, timezone: Optional[str] = None) -> Dict[Any, Any]:
+    async def register_date(
+        self, user_id: int, timezone: Optional[str] = None
+    ) -> Dict[Any, Any]:
         """
         Registers a date for a user with the given ID.
 
