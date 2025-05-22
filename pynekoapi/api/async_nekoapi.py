@@ -1,5 +1,7 @@
 from typing import Any, Dict, Optional
 
+import aiofiles
+from io import BytesIO
 from pynekoapi.tools import AsyncRequest
 
 
@@ -61,4 +63,17 @@ class AsyncNekoApi:
         if timezone is not None:
             url += f"&tz={timezone}"
         result = await self.fetch._post(url)
+        return result
+
+    async def transcribe(file: Union[str, BytesIO]):
+        url = self.base_url + "transcribe"
+        if isinstance(file, BytesIO):
+            files = {"file": (file.name, file)}
+            result = await self.fetch._post(url, files=files)
+        else:
+            async with aiofiles.open(file, "rb") as f:
+                file_name = file.split("/")[-1]
+                files = {"file": (file_name, await f.read())}
+                result = await self.fetch._post(url, files=files)
+
         return result
