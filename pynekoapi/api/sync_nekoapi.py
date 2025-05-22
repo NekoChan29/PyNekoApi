@@ -1,3 +1,4 @@
+import os
 from typing import Any, Dict, Optional, Union
 
 from io import BytesIO
@@ -70,8 +71,21 @@ class SyncNekoApi:
             files = {"file": (file.name, file)}
             result = self.fetch._post(url, files=files)
         else:
-            with aiofiles.open(file, "rb") as f:
-                file_name = file.split("/")[-1]
+            with open(file, "rb") as f:
+                file_name = os.path.basename(file)
+                files = {"file": (file_name, f)}
+                result = self.fetch._post(url, files=files)
+
+        return result
+
+    def nekograph(self, file: Union[str, BytesIO]):
+        url = self.base_url + "upload"
+        if isinstance(file, BytesIO):
+            files = {"file": (file.name, file)}
+            result = self.fetch._post(url, files=files)
+        else:
+            with open(file, "rb") as f:
+                file_name = os.path.basename(file)
                 files = {"file": (file_name, f)}
                 result = self.fetch._post(url, files=files)
 
