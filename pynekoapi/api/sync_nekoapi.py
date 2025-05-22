@@ -90,3 +90,39 @@ class SyncNekoApi:
                 result = self.fetch._post(url, files=files)
 
         return result
+
+    def youtube_dl(
+        self,
+        yt_url: str,
+        media_type: str = "video",
+        quality: Union[int, str] = "720p",
+    ):
+        url = self.base_url + "youtube/download"
+        payload = {
+            "url": yt_url,
+            "type": media_type,
+            "quality": quality,
+        }
+        resp = self.fetch.fetch.post(url, json=payload)
+        if resp.status_code != 200:
+            return {"ok": False, "error": "Failed download"}
+
+        title = resp.headers.get("X-Video-Title", "Unknown")
+        thumbnail = resp.headers.get("X-Video-Thumbnail", "")
+        duration = resp.headers.get("X-Video-Duration", 0)
+        artist = resp.headers.get("X-Video-Artist", "")
+
+        output = "output.mp4" if media_type == "video" else "output.mp3"
+        with open(output, "wb") as f:
+            for chunk in resp.iter_content(chunk_size=1024):
+                if chunk:
+                    f.write(resp.content)
+
+        return {
+            "ok": True,
+            "file": output,
+            "artist": artist,
+            "title": title,
+            "thumbnail": thumbnail,
+            "duration": int(duration),
+        }
